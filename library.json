@@ -1,0 +1,26 @@
+{
+    "name": "KMqtt",
+    "version": "1.0.0",
+    "description": "A handsome wrapper for PubSubClient",
+    "keywords": "PubSubClient, mqtt,",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/username/hello-world.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Konrad Schmid",
+        "email": "dev.k@skschmid.de",
+        "url": "https://www.john-smith/contact"
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://www.helloworld.org/",
+    "dependencies": {
+        "knolleary/PubSubClient": "~2.8"
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }
