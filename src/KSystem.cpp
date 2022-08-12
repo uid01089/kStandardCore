@@ -1,0 +1,32 @@
+#include <KSystem.h>
+
+KSystem::KSystem() {}
+KSystem::~KSystem() {}
+void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, NTPClient *timeClient)
+{
+    this->hostname = hostname;
+    this->kmqtt = kmqtt;
+    this->kscheduler = kscheduler;
+
+    timeClient->update();
+    this->startTime = timeClient->getFormattedTime();
+
+    // https://techoverflow.net/2021/11/09/minimal-platformio-esp8266-arduinoota-example/
+    ArduinoOTA.begin();
+
+    kmqtt->regCallBack(hostname + "/system/request/startime", std::bind(&KSystem::mqttStartTime, this, std::placeholders::_1));
+    kmqtt->regCallBack(hostname + "/system/request/ip", std::bind(&KSystem::mqttIpAddr, this, std::placeholders::_1));
+}
+void KSystem::loop()
+{
+    ArduinoOTA.handle();
+}
+
+void KSystem::mqttStartTime(String value)
+{
+    kmqtt->publish(hostname + "/system/result/startime", startTime);
+}
+void KSystem::mqttIpAddr(String value)
+{
+    kmqtt->publish(hostname + "/system/result/ip", WiFi.localIP().toString());
+}
