@@ -20,6 +20,7 @@ public:
     KSchedule *getKSchedule();
     WiFiClient *getWiFiClient();
     NTPClient *getNTPClient();
+    String& getHostname();
 
 private:
     WiFiClient espClient;
@@ -28,6 +29,7 @@ private:
     KMqtt kmqtt;
     KSchedule kschedule;
     KSystem ksystem;
+    String hostname;
 
     void setupWiFi(String hostname, String ssid, String password);
 };

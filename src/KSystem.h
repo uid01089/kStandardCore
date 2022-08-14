@@ -18,6 +18,7 @@ private:
 
     void mqttStartTime(String value);
     void mqttIpAddr(String value);
+    void mqttRSSI(String value);
 
 public:
     KSystem();

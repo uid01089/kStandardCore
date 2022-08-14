@@ -12,6 +12,7 @@ void KStandardCore::setup(String hostname, String ssid, String password, String 
     kmqtt.setup(espClient, mqttServer, mqttPort, hostname);
     kschedule.setup();
     ksystem.setup(hostname, &kmqtt, &kschedule, &timeClient);
+    this->hostname = hostname;
 }
 
 void KStandardCore::loop()
@@ -50,4 +51,9 @@ WiFiClient *KStandardCore::getWiFiClient()
 NTPClient *KStandardCore::getNTPClient()
 {
     return &timeClient;
+}
+
+String &KStandardCore::getHostname()
+{
+    return hostname;
 }
