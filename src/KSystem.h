@@ -20,6 +20,7 @@ private:
     void mqttIpAddr(String value);
     void mqttRSSI(String value);
     void mqttReset(String value);
+    void mqttKScheduleFreeElements(String value);
 
 public:
     KSystem();

@@ -11,6 +11,8 @@ void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPC
     timeClient->update();
     this->startTime = timeClient->getTimeString();
 
+    Serial.println("System started on " + startTime);
+
     // https://techoverflow.net/2021/11/09/minimal-platformio-esp8266-arduinoota-example/
     ArduinoOTA.begin();
 
@@ -18,6 +20,7 @@ void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPC
     kmqtt->regCallBack("/" + hostname + "/system/request/ip", std::bind(&KSystem::mqttIpAddr, this, std::placeholders::_1));
     kmqtt->regCallBack("/" + hostname + "/system/request/rssi", std::bind(&KSystem::mqttRSSI, this, std::placeholders::_1));
     kmqtt->regCallBack("/" + hostname + "/system/request/reset", std::bind(&KSystem::mqttReset, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + hostname + "/system/request/kschedulefreeelements", std::bind(&KSystem::mqttKScheduleFreeElements, this, std::placeholders::_1));
 }
 void KSystem::loop()
 {
@@ -42,4 +45,9 @@ void KSystem::mqttRSSI(String value)
 void KSystem::mqttReset(String value)
 {
     ESP.reset();
+}
+
+void KSystem::mqttKScheduleFreeElements(String value)
+{
+    kmqtt->publish("/" + hostname + "/system/result/kschedulefreeelements", String(kscheduler->getNumberOfFreeElements()).c_str());
 }
