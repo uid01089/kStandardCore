@@ -21,6 +21,7 @@ void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPC
     kmqtt->regCallBack("/" + hostname + "/system/request/rssi", std::bind(&KSystem::mqttRSSI, this, std::placeholders::_1));
     kmqtt->regCallBack("/" + hostname + "/system/request/reset", std::bind(&KSystem::mqttReset, this, std::placeholders::_1));
     kmqtt->regCallBack("/" + hostname + "/system/request/kschedulefreeelements", std::bind(&KSystem::mqttKScheduleFreeElements, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + hostname + "/system/request/espInfos", std::bind(&KSystem::mqttEspInfos, this, std::placeholders::_1));
 }
 void KSystem::loop()
 {
@@ -50,4 +51,11 @@ void KSystem::mqttReset(String value)
 void KSystem::mqttKScheduleFreeElements(String value)
 {
     kmqtt->publish("/" + hostname + "/system/result/kschedulefreeelements", String(kscheduler->getNumberOfFreeElements()).c_str());
+}
+
+void KSystem::mqttEspInfos(String value)
+{
+    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeContStack", String(ESP.getFreeContStack()).c_str());
+    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
+    kmqtt->publish("/" + hostname + "/system/result/ESP/HeapFragmentation", String(ESP.getHeapFragmentation()).c_str());
 }

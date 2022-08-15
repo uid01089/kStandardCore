@@ -21,6 +21,7 @@ private:
     void mqttRSSI(String value);
     void mqttReset(String value);
     void mqttKScheduleFreeElements(String value);
+    void mqttEspInfos(String value);
 
 public:
     KSystem();
