@@ -8,7 +8,7 @@ class CallbackEntry
 {
 
 public:
-    CallbackEntry(String topic, std::function<void(String)> fct);
+    CallbackEntry(String &topic, std::function<void(String)> fct);
     ~CallbackEntry();
     String getTopic();
     std::function<void(String)> getFct();

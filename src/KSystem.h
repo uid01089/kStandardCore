@@ -6,7 +6,7 @@
 #include <ESP8266WiFi.h>
 #include <KSchedule.h>
 #include <KMqtt.h>
-#include <NTPClient.h>
+#include <MyNTPClient.h>
 
 class KSystem
 {
@@ -19,11 +19,14 @@ private:
     void mqttStartTime(String value);
     void mqttIpAddr(String value);
     void mqttRSSI(String value);
+    void mqttReset(String value);
+    void mqttKScheduleFreeElements(String value);
+    void mqttEspInfos(String value);
 
 public:
     KSystem();
     ~KSystem();
-    void setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, NTPClient *timeClient);
+    void setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPClient *timeClient);
     void loop();
 };
 

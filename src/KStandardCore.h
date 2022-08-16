@@ -6,7 +6,7 @@
 #include <KMqtt.h>
 #include <KSchedule.h>
 #include <KSystem.h>
-#include <NTPClient.h>
+#include <MyNTPClient.h>
 
 class KStandardCore
 {
@@ -19,13 +19,13 @@ public:
     KMqtt *getKMqtt();
     KSchedule *getKSchedule();
     WiFiClient *getWiFiClient();
-    NTPClient *getNTPClient();
+    MyNTPClient *getNTPClient();
     String& getHostname();
 
 private:
     WiFiClient espClient;
     WiFiUDP ntpUDP;
-    NTPClient timeClient;
+    MyNTPClient timeClient;
     KMqtt kmqtt;
     KSchedule kschedule;
     KSystem ksystem;

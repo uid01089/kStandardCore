@@ -1,21 +1,25 @@
 #ifndef KSCHEDULE_h
 #define KSCHEDULE_h
 
-#include <list>
 #include <functional>
 
 #include "ScheduleEntry.h"
+#define MAX_TABLE_ENTRIES 200
 
 class KSchedule
 {
 private:
-    std::list<ScheduleEntry *> scheduleList;
+
+    ScheduleEntry scheduleTable[MAX_TABLE_ENTRIES];
+    unsigned int nrFreeElements = MAX_TABLE_ENTRIES;
 
 public:
     KSchedule();
     ~KSchedule();
     void setup();
     void loop();
+    unsigned int getNumberOfFreeElements();
+    
     /**
     e.g.
     kSchedule.schedule(std::bind(clcWaterMeasurement1_500ms), 5000); or

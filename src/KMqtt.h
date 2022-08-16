@@ -20,7 +20,7 @@ private:
 public:
     KMqtt();
     ~KMqtt();
-    void setup(WiFiClient &espClient, String mqttServer, const uint16_t port, String id);
+    void setup(WiFiClient &espClient, String &mqttServer, const uint16_t port, String &id);
     void loop();
     void regCallBack(String topic, std::function<void(String)> fct);
     void publish(String topic, String payload);

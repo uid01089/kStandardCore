@@ -48,7 +48,7 @@ WiFiClient *KStandardCore::getWiFiClient()
     return &espClient;
 }
 
-NTPClient *KStandardCore::getNTPClient()
+MyNTPClient *KStandardCore::getNTPClient()
 {
     return &timeClient;
 }
