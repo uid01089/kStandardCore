@@ -1,4 +1,5 @@
 #include <list>
+#include <algorithm> // std::min
 #include "KSchedule.h"
 #include <Arduino.h>
 
@@ -89,7 +90,7 @@ void KSchedule::schedule(std::function<void(void)> fct, unsigned long timePeriod
         }
     }
 
-    nrFreeElements = min(nrFreeElements, freeElements);
+    nrFreeElements = std::min(nrFreeElements, freeElements);
 
     /*
     ScheduleEntry *scheduleEntry = new ScheduleEntry(millis(), timePeriode, fct);
