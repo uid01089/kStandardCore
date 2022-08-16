@@ -1,6 +1,6 @@
 #include "CallbackEntry.h"
 
-CallbackEntry::CallbackEntry(String topic, std::function<void(String)> fct)
+CallbackEntry::CallbackEntry(String &topic, std::function<void(String)> fct)
 {
     this->fct = fct;
     this->topic = topic;

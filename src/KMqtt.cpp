@@ -7,7 +7,7 @@ KMqtt::KMqtt()
 KMqtt::~KMqtt()
 {
 }
-void KMqtt::setup(WiFiClient &espClient, String mqttServer, const uint16_t port, String id)
+void KMqtt::setup(WiFiClient &espClient, String &mqttServer, const uint16_t port, String &id)
 {
     pubsubclient.setClient(espClient);
     pubsubclient.setServer(mqttServer.c_str(), port);
