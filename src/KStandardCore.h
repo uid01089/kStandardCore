@@ -7,6 +7,7 @@
 #include <KSchedule.h>
 #include <KSystem.h>
 #include <MyNTPClient.h>
+#include <KWifi.h>
 
 class KStandardCore
 {
@@ -29,9 +30,10 @@ private:
     KMqtt kmqtt;
     KSchedule kschedule;
     KSystem ksystem;
+    KWifi kWifi;
     String hostname;
 
-    void setupWiFi(String hostname, String ssid, String password);
+    
 };
 
 #endif
