@@ -28,6 +28,7 @@ MyNTPClient::MyNTPClient(UDP &udp, IPAddress poolServerIP, long timeOffset, unsi
 
 String MyNTPClient::getTimeString()
 {
+    update();
     time_t rawTime = getEpochTime();
     struct tm *timeInfo = localtime(&rawTime);
     char buffer[80];
