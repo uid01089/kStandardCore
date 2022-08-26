@@ -45,7 +45,7 @@ void KSystem::mqttRSSI(String value)
 
 void KSystem::mqttReset(String value)
 {
-    ESP.reset();
+    ESP.restart();
 }
 
 void KSystem::mqttKScheduleFreeElements(String value)
