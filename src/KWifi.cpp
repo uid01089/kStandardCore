@@ -63,6 +63,8 @@ void KWifi::wifi_100ms()
 
         case KWIFI_RESTART:
             // Waiting time ended. Restart ESP
+            Serial.println("Wifi Timeout reached, do restart");
+
             ESP.restart();
             break;
 

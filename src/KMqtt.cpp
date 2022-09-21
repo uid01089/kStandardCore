@@ -109,6 +109,7 @@ void KMqtt::kmqtt_100ms()
             else
             {
                 // Timeout reached, do restart
+                Serial.println("MQTT Timeout reached, do restart");
                 status = KMQTT_RESTART;
             }
 
