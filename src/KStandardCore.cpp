@@ -10,7 +10,7 @@ void KStandardCore::setup(String hostname, String ssid, String password, String 
     kschedule.setup();
     kWifi.setup(&kschedule, hostname, ssid, password);
     timeClient.begin();
-    kmqtt.setup(espClient, mqttServer, mqttPort, hostname);
+    kmqtt.setup(&kschedule, espClient, mqttServer, mqttPort, hostname);
     ksystem.setup(hostname, &kmqtt, &kschedule, &timeClient);
     this->hostname = hostname;
 }
