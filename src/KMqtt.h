@@ -2,8 +2,13 @@
 #define KMQTT_H
 
 #include <list>
+#include <map>
 #include <functional>
+#if defined(ESP32)
+#include <WiFi.h>
+#else
 #include <ESP8266WiFi.h>
+#endif
 #include <PubSubClient.h>
 #include <KSchedule.h>
 
@@ -30,15 +35,18 @@ private:
     PubSubClient pubsubclient;
     void kmqtt_100ms();
     uint16_t timeoutCtr;
-    String id;
+    String hostname;
+    std::map<String, String> onChangeDict;
+    void resetPublishOnChangeBuffer(String value);
 
 public:
     KMqtt();
     ~KMqtt();
-    void setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &id);
+    void setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &hostname);
     void loop();
     void regCallBack(String topic, std::function<void(String)> fct);
     void publish(String topic, String payload);
+    void publishOnChange(String topic, String payload);
 };
 
 #endif

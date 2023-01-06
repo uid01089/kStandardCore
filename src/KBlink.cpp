@@ -2,7 +2,11 @@
 
 // https://randomnerdtutorials.com/esp8266-pinout-reference-gpios/
 
+#if defined(ESP32)
+#define LED_PIN 2
+#else
 #define LED_PIN D4
+#endif
 
 KBlink::KBlink() {}
 KBlink::~KBlink() {}

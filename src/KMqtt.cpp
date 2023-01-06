@@ -10,16 +10,16 @@ KMqtt::KMqtt()
 KMqtt::~KMqtt()
 {
 }
-void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &id)
+void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &hostname)
 {
     this->kscheduler = kscheduler;
-    this->id = id;
+    this->hostname = hostname;
 
     pubsubclient.setClient(espClient);
     pubsubclient.setServer(mqttServer.c_str(), port);
     while (!pubsubclient.connected())
     {
-        pubsubclient.connect(id.c_str());
+        pubsubclient.connect(hostname.c_str());
         delay(100);
     }
 
@@ -27,7 +27,10 @@ void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServ
 
     status = KMQTT_CONNECTED;
 
+    resetPublishOnChangeBuffer("");
     kmqtt_100ms();
+
+    regCallBack("/" + hostname + "/mqtt/reset", std::bind(&KMqtt::resetPublishOnChangeBuffer, this, std::placeholders::_1));
 }
 void KMqtt::loop()
 {
@@ -62,6 +65,34 @@ void KMqtt::publish(String topic, String payload)
     pubsubclient.publish(topic.c_str(), payload.c_str());
 }
 
+void KMqtt::publishOnChange(String topic, String payload)
+{
+    std::map<String, String>::iterator it = onChangeDict.find(topic);
+
+    // Check if element exists in map or not
+    if (it != onChangeDict.end())
+    {
+        // Element exists
+        if (it->second != payload)
+        {
+            // topic exists, but payload is different, transmit
+            onChangeDict[topic] = payload;
+            publish(topic, payload);
+        }
+        else
+        {
+            // payload unchanged, do not publish it
+            Serial.println("Payload unchanged");
+        }
+    }
+    else
+    {
+        // Element not exists, publish it
+        onChangeDict[topic] = payload;
+        publish(topic, payload);
+    }
+}
+
 String KMqtt::payloadToString(byte *payload, unsigned int length)
 {
     char messageBuffer[length];             // somewhere to put the message
@@ -93,7 +124,7 @@ void KMqtt::kmqtt_100ms()
             {
                 // WiFi available, do mqtt connecting
                 timeoutCtr = TIME_TO_BE_CONNECTED_100MS;
-                pubsubclient.connect(id.c_str());
+                pubsubclient.connect(hostname.c_str());
             }
 
             status = KMQTT_CONNECTING;
@@ -137,4 +168,10 @@ void KMqtt::kmqtt_100ms()
     }
 
     kscheduler->schedule(std::bind(&KMqtt::kmqtt_100ms, this), 100);
+}
+
+void KMqtt::resetPublishOnChangeBuffer(String value)
+{
+    Serial.println("onChangeDict cleared");
+    onChangeDict.clear();
 }

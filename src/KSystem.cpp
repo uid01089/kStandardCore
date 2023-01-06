@@ -55,7 +55,12 @@ void KSystem::mqttKScheduleFreeElements(String value)
 
 void KSystem::mqttEspInfos(String value)
 {
+
+#if defined(ESP32)
+    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
+#else
     kmqtt->publish("/" + hostname + "/system/result/ESP/FreeContStack", String(ESP.getFreeContStack()).c_str());
     kmqtt->publish("/" + hostname + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
     kmqtt->publish("/" + hostname + "/system/result/ESP/HeapFragmentation", String(ESP.getHeapFragmentation()).c_str());
+#endif
 }
