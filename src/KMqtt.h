@@ -47,6 +47,7 @@ public:
     void regCallBack(String topic, std::function<void(String)> fct);
     void publish(String topic, String payload);
     void publishOnChange(String topic, String payload);
+    void forcedPublish(String topic, String payload);
 };
 
 #endif
