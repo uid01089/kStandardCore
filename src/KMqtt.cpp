@@ -65,6 +65,12 @@ void KMqtt::publish(String topic, String payload)
     pubsubclient.publish(topic.c_str(), payload.c_str());
 }
 
+void KMqtt::forcedPublish(String topic, String payload)
+{
+    publish(topic, payload);
+    loop();
+}
+
 void KMqtt::publishOnChange(String topic, String payload)
 {
     std::map<String, String>::iterator it = onChangeDict.find(topic);
