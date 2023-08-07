@@ -2,9 +2,9 @@
 
 KSystem::KSystem() {}
 KSystem::~KSystem() {}
-void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPClient *timeClient)
+void KSystem::setup(String topicPathWithoutLeadingSlash, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPClient *timeClient)
 {
-    this->hostname = hostname;
+    this->topicPathWithoutLeadingSlash = topicPathWithoutLeadingSlash;
     this->kmqtt = kmqtt;
     this->kscheduler = kscheduler;
 
@@ -16,12 +16,12 @@ void KSystem::setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPC
     // https://techoverflow.net/2021/11/09/minimal-platformio-esp8266-arduinoota-example/
     ArduinoOTA.begin();
 
-    kmqtt->regCallBack("/" + hostname + "/system/request/startime", std::bind(&KSystem::mqttStartTime, this, std::placeholders::_1));
-    kmqtt->regCallBack("/" + hostname + "/system/request/ip", std::bind(&KSystem::mqttIpAddr, this, std::placeholders::_1));
-    kmqtt->regCallBack("/" + hostname + "/system/request/rssi", std::bind(&KSystem::mqttRSSI, this, std::placeholders::_1));
-    kmqtt->regCallBack("/" + hostname + "/system/request/reset", std::bind(&KSystem::mqttReset, this, std::placeholders::_1));
-    kmqtt->regCallBack("/" + hostname + "/system/request/kschedulefreeelements", std::bind(&KSystem::mqttKScheduleFreeElements, this, std::placeholders::_1));
-    kmqtt->regCallBack("/" + hostname + "/system/request/espInfos", std::bind(&KSystem::mqttEspInfos, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/startime", std::bind(&KSystem::mqttStartTime, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/ip", std::bind(&KSystem::mqttIpAddr, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/rssi", std::bind(&KSystem::mqttRSSI, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/reset", std::bind(&KSystem::mqttReset, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/kschedulefreeelements", std::bind(&KSystem::mqttKScheduleFreeElements, this, std::placeholders::_1));
+    kmqtt->regCallBack("/" + topicPathWithoutLeadingSlash + "/system/request/espInfos", std::bind(&KSystem::mqttEspInfos, this, std::placeholders::_1));
 }
 void KSystem::loop()
 {
@@ -30,17 +30,17 @@ void KSystem::loop()
 
 void KSystem::mqttStartTime(String value)
 {
-    kmqtt->publish("/" + hostname + "/system/result/startime", startTime);
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/startime", startTime);
 }
 
 void KSystem::mqttIpAddr(String value)
 {
-    kmqtt->publish("/" + hostname + "/system/result/ip", WiFi.localIP().toString());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/ip", WiFi.localIP().toString());
 }
 
 void KSystem::mqttRSSI(String value)
 {
-    kmqtt->publish("/" + hostname + "/system/result/rssi", String(WiFi.RSSI()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/rssi", String(WiFi.RSSI()).c_str());
 }
 
 void KSystem::mqttReset(String value)
@@ -50,17 +50,17 @@ void KSystem::mqttReset(String value)
 
 void KSystem::mqttKScheduleFreeElements(String value)
 {
-    kmqtt->publish("/" + hostname + "/system/result/kschedulefreeelements", String(kscheduler->getNumberOfFreeElements()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/kschedulefreeelements", String(kscheduler->getNumberOfFreeElements()).c_str());
 }
 
 void KSystem::mqttEspInfos(String value)
 {
 
 #if defined(ESP32)
-    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
 #else
-    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeContStack", String(ESP.getFreeContStack()).c_str());
-    kmqtt->publish("/" + hostname + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
-    kmqtt->publish("/" + hostname + "/system/result/ESP/HeapFragmentation", String(ESP.getHeapFragmentation()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/ESP/FreeContStack", String(ESP.getFreeContStack()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/ESP/FreeHeap", String(ESP.getFreeHeap()).c_str());
+    kmqtt->publish("/" + topicPathWithoutLeadingSlash + "/system/result/ESP/HeapFragmentation", String(ESP.getHeapFragmentation()).c_str());
 #endif
 }

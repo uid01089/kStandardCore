@@ -18,7 +18,7 @@ class KSystem
 private:
     KMqtt *kmqtt;
     KSchedule *kscheduler;
-    String hostname;
+    String topicPathWithoutLeadingSlash;
     String startTime;
 
     void mqttStartTime(String value);
@@ -31,7 +31,7 @@ private:
 public:
     KSystem();
     ~KSystem();
-    void setup(String hostname, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPClient *timeClient);
+    void setup(String topicPathWithoutLeadingSlash, KMqtt *kmqtt, KSchedule *kscheduler, MyNTPClient *timeClient);
     void loop();
 };
 

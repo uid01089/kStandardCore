@@ -5,14 +5,18 @@
 KStandardCore::KStandardCore() : timeClient(ntpUDP, "europe.pool.ntp.org", utcOffsetInSeconds) {}
 KStandardCore::~KStandardCore() {}
 
-void KStandardCore::setup(String hostname, String ssid, String password, String mqttServer, uint16_t mqttPort)
+void KStandardCore::setup(String topicPathWithoutLeadingSlash, String ssid, String password, String mqttServer, uint16_t mqttPort)
 {
+    String hostname = String(topicPathWithoutLeadingSlash);
+    hostname.replace("/", "_");
     kschedule.setup();
     kWifi.setup(&kschedule, hostname, ssid, password);
     timeClient.begin();
-    kmqtt.setup(&kschedule, espClient, mqttServer, mqttPort, hostname);
-    ksystem.setup(hostname, &kmqtt, &kschedule, &timeClient);
+    kmqtt.setup(&kschedule, espClient, mqttServer, mqttPort, topicPathWithoutLeadingSlash);
+    ksystem.setup(topicPathWithoutLeadingSlash, &kmqtt, &kschedule, &timeClient);
+
     this->hostname = hostname;
+    this->topicPathWithoutLeadingSlash = topicPathWithoutLeadingSlash;
 }
 
 void KStandardCore::loop()
@@ -46,4 +50,9 @@ MyNTPClient *KStandardCore::getNTPClient()
 String &KStandardCore::getHostname()
 {
     return hostname;
+}
+
+String &KStandardCore::getTopicPathWithoutLeadingSlash()
+{
+    return topicPathWithoutLeadingSlash;
 }

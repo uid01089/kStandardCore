@@ -20,13 +20,14 @@ class KStandardCore
 public:
     KStandardCore();
     ~KStandardCore();
-    void setup(String hostname, String ssid, String password, String mqttServer, uint16_t mqttPort);
+    void setup(String topicPathWithoutLeadingSlash, String ssid, String password, String mqttServer, uint16_t mqttPort);
     void loop();
     KMqtt *getKMqtt();
     KSchedule *getKSchedule();
     WiFiClient *getWiFiClient();
     MyNTPClient *getNTPClient();
     String& getHostname();
+    String& getTopicPathWithoutLeadingSlash();
 
 private:
     WiFiClient espClient;
@@ -37,6 +38,7 @@ private:
     KSystem ksystem;
     KWifi kWifi;
     String hostname;
+    String topicPathWithoutLeadingSlash;
 
     
 };

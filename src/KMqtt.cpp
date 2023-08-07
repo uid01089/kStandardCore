@@ -10,16 +10,16 @@ KMqtt::KMqtt()
 KMqtt::~KMqtt()
 {
 }
-void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &hostname)
+void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServer, const uint16_t port, String &topicPathWithoutLeadingSlash)
 {
     this->kscheduler = kscheduler;
-    this->hostname = hostname;
+    this->hostname = topicPathWithoutLeadingSlash;
 
     pubsubclient.setClient(espClient);
     pubsubclient.setServer(mqttServer.c_str(), port);
     while (!pubsubclient.connected())
     {
-        pubsubclient.connect(hostname.c_str());
+        pubsubclient.connect(topicPathWithoutLeadingSlash.c_str());
         delay(100);
     }
 
@@ -30,7 +30,7 @@ void KMqtt::setup(KSchedule *kscheduler, WiFiClient &espClient, String &mqttServ
     resetPublishOnChangeBuffer("");
     kmqtt_100ms();
 
-    regCallBack("/" + hostname + "/mqtt/reset", std::bind(&KMqtt::resetPublishOnChangeBuffer, this, std::placeholders::_1));
+    regCallBack("/" + topicPathWithoutLeadingSlash + "/mqtt/reset", std::bind(&KMqtt::resetPublishOnChangeBuffer, this, std::placeholders::_1));
 }
 void KMqtt::loop()
 {
